@@ -1,0 +1,31 @@
+name: forge-egress-probe4
+on: push
+jobs:
+  probe4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: bounded-internal-reachability
+        run: |
+          set +e
+          S="$GITHUB_STEP_SUMMARY"
+          echo "## probe4 bounded internal reachability" >> "$S"
+          echo "- ip addr: $(hostname -I | tr -d '\n')" >> "$S"
+          GW=$(ip route | awk '/^default/ {print $3; exit}')
+          echo "- default gateway: $GW" >> "$S"
+          chk() {
+            r=$(curl -s -m 4 -o /dev/null -w '%{http_code}|%{size_download}|%{time_total}' "$1")
+            echo "- $1 -> $r" >> "$S"
+          }
+          chk "http://$GW/"
+          chk "https://$GW/"
+          chk "http://168.63.129.16/"
+          r=$(curl -s -m 4 -o /dev/null -w '%{http_code}|%{size_download}' -H 'x-ms-version: 2012-11-30' "http://168.63.129.16/machine/?comp=goalstate")
+          echo "- azure wireserver goalstate (status/size only) -> $r" >> "$S"
+          r=$(curl -s -m 4 -o /dev/null -w '%{http_code}|%{size_download}' -H 'Metadata: true' "http://169.254.169.254/metadata/identity/info?api-version=2018-02-01")
+          echo "- azure MSI identity/info (status/size only, no token requested) -> $r" >> "$S"
+          r=$(curl -s -m 4 -o /dev/null -w '%{http_code}|%{size_download}' -H 'Metadata: true' "http://169.254.169.254/metadata/instance/network?api-version=2021-02-01")
+          echo "- azure imds instance/network (status/size only) -> $r" >> "$S"
+          echo "- outbound 25/tcp: $( (echo > /dev/tcp/aspmx.l.google.com/25) 2>&1 && echo open || echo blocked)" >> "$S"
+          echo "- outbound 22/tcp github: $( (echo > /dev/tcp/ssh.github.com/22) 2>&1 && echo open || echo blocked)" >> "$S"
+          echo "::notice title=forge-probe4::complete"
