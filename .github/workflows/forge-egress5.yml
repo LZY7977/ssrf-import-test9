@@ -1,0 +1,33 @@
+name: forge-egress-probe5
+on: push
+jobs:
+  probe5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: imds-filter-surface
+        run: |
+          set +e
+          S="$GITHUB_STEP_SUMMARY"
+          echo "## probe5 IMDS filter surface (keys only, ids redacted)" >> "$S"
+          curl -s -m 5 -H 'Metadata: true' "http://169.254.169.254/metadata/instance?api-version=2021-02-01" -o /tmp/md -w '- instance doc http=%{http_code} bytes=%{size_download}\n' >> "$S"
+          python3 - <<'PY' >> "$S"
+          import json
+          try:
+              d=json.load(open('/tmp/md'))
+          except Exception as e:
+              print("- parse error "+str(e)); raise SystemExit
+          def red(v):
+              v=str(v)
+              return (v[:4]+"...len"+str(len(v))) if len(v)>8 else v
+          for sect,vals in d.items():
+              print("- section `%s` keys: %s" % (sect, ",".join(sorted(vals.keys())) if isinstance(vals,dict) else type(vals).__name__))
+          c=d.get('compute',{})
+          for k in ('location','vmSize','osType','sku','zone','platformFaultDomain','subscriptionId','resourceGroupName','vmId','resourceId','name','provider'):
+              if k in c: print("- compute.%s = %s" % (k, red(c[k])))
+          PY
+          for p in "metadata/identity/info" "metadata/instance/network" "metadata/instance/compute/userData" "metadata/attested/document" "metadata/versions"; do
+            r=$(curl -s -m 5 -o /dev/null -w '%{http_code}|%{size_download}' -H 'Metadata: true' "http://169.254.169.254/$p?api-version=2021-02-01")
+            echo "- /$p -> $r" >> "$S"
+          done
+          echo "::notice title=forge-probe5::complete"
