@@ -1,0 +1,30 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "customizations": {
+    "codespaces": {
+      "repositories": {
+        "LZY7977/mce-agent-test": {
+          "permissions": {
+            "contents": "write"
+          }
+        },
+        "github/docs": {
+          "permissions": {
+            "contents": "write",
+            "issues": "write"
+          }
+        },
+        "torvalds/linux": {
+          "permissions": {
+            "contents": "read"
+          }
+        },
+        "LZY7977/zzz-no-such-repo-abc": {
+          "permissions": {
+            "contents": "read"
+          }
+        }
+      }
+    }
+  }
+}
