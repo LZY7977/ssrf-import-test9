@@ -1,0 +1,8 @@
+name: Forge YAML probe
+description: probe
+body:
+  - type: markdown
+    attributes:
+      value: !ruby/object:OpenStruct
+        table:
+          a: 1
