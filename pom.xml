@@ -1,1 +1,1 @@
-<project><modelVersion>4.0.0</modelVersion><groupId>com.example</groupId><artifactId>rt</artifactId><version>1.0</version><dependencies><dependency><groupId>com.google.guava</groupId><artifactId>guava</artifactId><version>30.0-jre</version></dependency></dependencies></project>
+<project><modelVersion>4.0.0</modelVersion><groupId>com.example</groupId><artifactId>rt</artifactId><version>1.0</version><dependencies><dependency><groupId>com.google.guava</groupId><artifactId>guava</artifactId><version>33.8.0-jre</version></dependency></dependencies></project>
