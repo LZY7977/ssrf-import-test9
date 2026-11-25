@@ -4,7 +4,7 @@ registries:
     type: maven-repository
     url: http://PEN-DKRA-4720-4676.dns.collabp-reg1.devops.aws.dev/maven-registry
     username: forge-canary
-    password: ${{secrets.FORGE_CANARY_SECRET}}
+    password: FORGE-CANARY-9486ad3f
 updates:
   - package-ecosystem: "maven"
     directory: "/"
