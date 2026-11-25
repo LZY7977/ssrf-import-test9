@@ -1,0 +1,14 @@
+name: val-egress
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/val-egress.yml'
+jobs:
+  egress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: resolve caller-named host
+        run: getent hosts PEN-ZCGF-1335-4266.dns.collabp-reg1.devops.aws.dev || true
+      - name: fetch caller-named host
+        run: curl -sS -m 10 -o /dev/null -w 'http_code=%{http_code}\n' http://PEN-ZCGF-1335-4266.dns.collabp-reg1.devops.aws.dev/actions-equivalent || true
