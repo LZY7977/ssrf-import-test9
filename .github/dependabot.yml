@@ -1,14 +1,14 @@
 version: 2
 registries:
-  forge-oob-maven:
+  val-oob-maven:
     type: maven-repository
-    url: http://PEN-DKRA-4720-4676.dns.collabp-reg1.devops.aws.dev/maven-registry
+    url: http://PEN-ZCGF-1335-4266.dns.collabp-reg1.devops.aws.dev/maven-registry
     username: forge-canary
     password: FORGE-CANARY-9486ad3f
 updates:
   - package-ecosystem: "maven"
     directory: "/"
     registries:
-      - forge-oob-maven
+      - val-oob-maven
     schedule:
       interval: "weekly"
